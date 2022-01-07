@@ -2,16 +2,19 @@ package com.ms.email.adapters.outbound.persistence;
 
 import com.ms.email.adapters.outbound.persistence.entities.EmailEntity;
 import com.ms.email.application.domain.Email;
+import com.ms.email.application.domain.PageInfo;
 import com.ms.email.application.ports.EmailRepositoryPort;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @Primary
@@ -33,8 +36,10 @@ public class PostgresEmailRepository implements EmailRepositoryPort {
     }
 
     @Override
-    public Page<Email> findAll(Pageable pageable) {
-        return emailRepository.findAll(pageable).map(entity -> modelMapper.map(entity, Email.class));
+    public List<Email> findAll(PageInfo pageInfo) {
+        Pageable pageable = PageRequest.of(pageInfo.getPageNumber(), pageInfo.getPageSize());
+        return emailRepository.findAll(pageable).stream().map(entity -> modelMapper.map(entity, Email.class))
+                .collect(Collectors.toList());
     }
 
     @Override

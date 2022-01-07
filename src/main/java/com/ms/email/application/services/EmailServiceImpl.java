@@ -1,14 +1,14 @@
 package com.ms.email.application.services;
 
 import com.ms.email.application.domain.Email;
+import com.ms.email.application.domain.PageInfo;
 import com.ms.email.application.domain.enums.StatusEmail;
 import com.ms.email.application.ports.EmailRepositoryPort;
 import com.ms.email.application.ports.EmailServicePort;
 import com.ms.email.application.ports.SendEmailServicePort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,8 +36,8 @@ public class EmailServiceImpl implements EmailServicePort {
     }
 
     @Override
-    public Page<Email> findAll(Pageable pageable) {
-        return emailRepositoryPort.findAll(pageable);
+    public List<Email> findAll(PageInfo pageInfo) {
+        return emailRepositoryPort.findAll(pageInfo);
     }
 
     @Override
